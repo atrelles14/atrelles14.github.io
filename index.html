@@ -39,7 +39,7 @@
 
 	<link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
-	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="css/animate.css">
 	<!-- Icomoon Icon Fonts-->
@@ -66,7 +66,260 @@
 
 	</head>
 	<body>
+		<!-- Añade este HTML -->
+<div id="audio-container">
+	<audio id="background-audio">
+	  <source src="https://res.cloudinary.com/dchmbnk4c/video/upload/v1746127723/Phil_Everly_-_Let_It_Be_Me_Flipped_OST_2010_go7a2x.mp3" type="audio/mpeg">
+	  Tu navegador no soporta audio.
+	</audio>
+	
+	<button id="play-audio" class="play-button">
+	  <i class="fas fa-play"></i> Reproducir música
+	</button>
+  </div>
+  
+  <style>
+	    /* Estilos base para el header */
+		#fh5co-header {
+        height: 100vh; /* Altura completa de la ventana */
+        min-height: 500px; /* Altura mínima */
+        width: 100%;
+        background-size: cover;
+        background-position: center center;
+        position: relative;
+        margin-bottom: 0;
+    }
+    
+    /* Overlay oscuro para mejorar la legibilidad del texto */
+    #fh5co-header .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        content: '';
+    }
+    
+    /* Contenedor para centrar verticalmente el contenido */
+    .display-t {
+        display: table;
+        width: 100%;
+        height: 100vh;
+        min-height: 500px;
+    }
+    
+    .display-tc {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 20px;
+    }
+    
+    /* Estilos de texto para el header */
+    #fh5co-header h1 {
+        margin: 0;
+        padding: 0;
+        color: white;
+        font-size: 50px;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    }
+    
+    #fh5co-header h2 {
+        font-size: 30px;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 300;
+    }
+    
+    #fh5co-header .quote {
+        font-size: 24px;
+        color: rgba(255, 255, 255, 0.8);
+        font-style: italic;
+        margin-bottom: 30px;
+    }
+    
+    /* Estilos responsivos para dispositivos medianos */
+    @media screen and (max-width: 992px) {
+        #fh5co-header h1 {
+            font-size: 40px;
+        }
+        
+        #fh5co-header h2 {
+            font-size: 25px;
+        }
+        
+        #fh5co-header .quote {
+            font-size: 20px;
+        }
+    }
+    
+    /* Estilos responsivos para dispositivos móviles */
+    @media screen and (max-width: 768px) {
+        #fh5co-header {
+            min-height: 450px; /* Reducir altura mínima */
+        }
+        
+        .display-t {
+            min-height: 450px;
+        }
+        
+        #fh5co-header h1 {
+            font-size: 32px;
+        }
+        
+        #fh5co-header h2 {
+            font-size: 20px;
+        }
+        
+        #fh5co-header .quote {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 6px 15px;
+            font-size: 14px;
+        }
+    }
+    
+    /* Estilos responsivos para dispositivos muy pequeños */
+    @media screen and (max-width: 480px) {
+        #fh5co-header {
+            min-height: 400px;
+        }
+        
+        .display-t {
+            min-height: 400px;
+        }
+        
+        #fh5co-header h1 {
+            font-size: 26px;
+        }
+        
+        #fh5co-header h2 {
+            font-size: 18px;
+        }
+        
+        #fh5co-header .quote {
+            font-size: 16px;
+        }
+    }
+    
+    /* Arreglo para la integración con Bootstrap */
+    .modal-content {
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    
+    /* Mejora para botón */
+    .btn-default {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border: 2px solid #fff;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-default:hover {
+        background: #fff;
+        color: #333;
+    }
+
+	#audio-container {
+	  position: fixed;
+	  bottom: 20px;
+	  right: 20px;
+	  z-index: 1000;
+	}
+	
+	.play-button {
+	  background-color: #8B4513;
+	  color: white;
+	  border: none;
+	  border-radius: 30px;
+	  padding: 10px 15px;
+	  cursor: pointer;
+	  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	  transition: all 0.3s ease;
+	  display: flex;
+	  align-items: center;
+	  gap: 8px;
+	}
+	
+	.play-button:hover {
+	  background-color: #6B3E26;
+	  transform: scale(1.05);
+	}
+	
+	.play-button.playing {
+	  background-color: #6B3E26;
+	}
+	
+	.play-button i {
+	  font-size: 16px;
+	}
+  </style>
+  
+  <script>
+	document.addEventListener("DOMContentLoaded", function() {
+	  const audio = document.getElementById("background-audio");
+	  const playButton = document.getElementById("play-audio");
+	  
+	  // Configurar audio
+	  audio.volume = 0.10; // volumen bajo (50%)
+	  
+	  // Manejar el estado de reproducción
+	  let isPlaying = false;
+	  
+	  // Función para actualizar el botón según el estado
+	  function updateButton() {
+		if (isPlaying) {
+		  playButton.innerHTML = '<i class="fas fa-pause"></i> Pausar música';
+		  playButton.classList.add('playing');
+		} else {
+		  playButton.innerHTML = '<i class="fas fa-play"></i> Reproducir música';
+		  playButton.classList.remove('playing');
+		}
+	  }
+	  
+	  // Evento para el botón de reproducción
+	  playButton.addEventListener("click", function() {
+		if (isPlaying) {
+		  audio.pause();
+		} else {
+		  audio.play().catch(err => {
+			console.error("Error al reproducir audio:", err);
+		  });
+		}
 		
+		isPlaying = !isPlaying;
+		updateButton();
+	  });
+	  
+	  // Actualizar el botón cuando el audio se detiene
+	  audio.addEventListener("ended", function() {
+		isPlaying = false;
+		updateButton();
+	  });
+	  
+	  // Manejar reproducción automática después de interacción con la página
+	  document.addEventListener("click", function onFirstClick() {
+		// Intentar reproducir el audio después de la primera interacción
+		// Pero solo si el usuario no ha interactuado con el botón aún
+		if (!isPlaying) {
+		  audio.play().then(() => {
+			isPlaying = true;
+			updateButton();
+		  }).catch(err => {
+			// Si falla, no hacemos nada, el usuario deberá usar el botón
+		  });
+		}
+		
+		// Eliminar este listener después de la primera interacción
+		document.removeEventListener("click", onFirstClick);
+	  }, { once: true });
+	});
+  </script>
 	<div class="fh5co-loader"></div>
 	
 	<div id="page">
@@ -86,35 +339,38 @@
 		</div>
 	</nav>
 
-	<header id="fh5co-header" class="fh5co-cover" role="banner" style="background-image:url(https://res.cloudinary.com/dchmbnk4c/image/upload/v1746104992/Lourdes10_pcv6zj.jpg);" data-stellar-background-ratio="0.5">
-		<div class="overlay"></div>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2 text-center">
-					<div class="display-t">
-						<div class="display-tc animate-box" data-animate-effect="fadeIn">
-							<h1>Lourdes &amp; Andrés</h1>
-							<h2>Date formal</h2>
-							<p class="quote">"Desde que llegaste, supe que eras tú."</p>
-							<p><a href="#" class="btn btn-default btn-sm" data-toggle="modal" data-target="#mediaModal">Presiona para ver</a></p>						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</header>
-	<div class="modal fade" id="mediaModal" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel">
-		<div class="modal-dialog modal-lg" role="document">
-		  <div class="modal-content">
-			<div class="modal-body" style="padding: 0;">
-			  <div class="embed-responsive embed-responsive-16by9">
-				<iframe class="embed-responsive-item" 
-				  src="https://drive.google.com/file/d/1nTwOkCX1F1p0GRRU3XMvuba3HfzBmFF6/preview" 
-				  allow="autoplay" allowfullscreen></iframe>
-			  </div>
-			</div>
-		  </div>
-		</div>
-	  </div>
+<header id="fh5co-header" class="fh5co-cover" role="banner" style="background-image:url(https://res.cloudinary.com/dchmbnk4c/image/upload/v1746104992/Lourdes10_pcv6zj.jpg);" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center">
+                <div class="display-t">
+                    <div class="display-tc animate-box" data-animate-effect="fadeIn">
+                        <h1>Lourdes &amp; Andrés</h1>
+                        <h2>Date formal</h2>
+                        <p class="quote">"Desde que llegaste, supe que eras tú."</p>
+                        <p><a href="#" class="btn btn-default btn-sm" data-toggle="modal" data-target="#mediaModal">Presiona para ver</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="modal fade" id="mediaModal" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 0;">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item"
+                      src="https://drive.google.com/file/d/1nTwOkCX1F1p0GRRU3XMvuba3HfzBmFF6/preview"
+                      allow="autoplay" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 	<div id="fh5co-couple">
 		<div class="container">
 			<div class="row">
@@ -273,7 +529,7 @@
 									<span class="date">Septiembre, 2024</span>
 								</div>
 								<div class="timeline-body">
-									<p>Veo todas las fotos y regularmente estabamos uno al lado del otro, las casualidades no existen. Aún no me daba cuenta de tu presencia en mi vida.</p>
+									<p>Veo todas las fotos y regularmente estabamos uno al lado del otro, las casualidades no existen. Aún no dimensionaba el hecho de tu presencia en mi vida.</p>
 								</div>
 							</div>
 						</li>
@@ -389,7 +645,7 @@
     <div class="album-page" style="background-image: url(https://res.cloudinary.com/dchmbnk4c/image/upload/v1746104993/Lourdes13_nkpsz7.jpg);">
         <div class="page-content">
             <span>Familia</span>
-            <h4 style="color: #f0e6da; font-weight: bold;">Aquí me dí cuenta que tu familia, es mi familia también.</h4>
+            <h4 style="color: #f0e6da; font-weight: bold;">Aquí me dí cuenta que tu familia, es mi familia.</h4>
         </div>
     </div>
     <div class="album-page video-page" data-video-src="https://res.cloudinary.com/dchmbnk4c/video/upload/v1746105006/Lourdes35_rkcbpy.mp4">
@@ -466,10 +722,10 @@
                     </div>
                     
                     <!-- Controles de navegación -->
-                    <div class="album-controls">
-                        <button class="btn album-prev" style="background-color: #000;"><i class="fas fa-chevron-left"></i></button>
-                        <button class="btn album-next" style="background-color: #000;"><i class="fas fa-chevron-right"></i></button>
-                    </div>
+					<div class="album-controls">
+						<button class="btn album-prev"><i class="fas fa-chevron-left"></i></button>
+						<button class="btn album-next"><i class="fas fa-chevron-right"></i></button>
+					</div>					
                 </div>
             </div>
         </div>
@@ -732,7 +988,7 @@
     height: 100%;
     border-radius: 4px;
 }
-
+/* Cambiar la opacidad inicial de los controles para que sean visibles siempre */
 .album-controls {
     position: absolute;
     bottom: -50px;
@@ -741,17 +997,14 @@
     display: flex;
     justify-content: center;
     gap: 20px;
-    opacity: 0;
+    opacity: 1; /* Cambiado de 0 a 1 para que siempre sea visible */
     transition: opacity 0.5s ease;
 }
 
-.album-open .album-controls {
-    opacity: 1;
-}
-
+/* Actualizar el color del texto en los botones */
 .album-controls .btn {
     background-color: #8B4513;
-    color: white;
+    color: white; /* Cambiado a blanco para mejor visibilidad */
     border: none;
     padding: 8px 15px;
     border-radius: 30px;
@@ -759,11 +1012,22 @@
     transition: all 0.3s ease;
 }
 
-.album-controls .btn:hover {
-    background-color: #6B3E26;
-    transform: scale(1.05);
+/* Añadir soporte para dispositivos móviles */
+@media (max-width: 768px) {
+    .album-controls {
+        bottom: -70px; /* Más espacio para tocar en móviles */
+    }
+    
+    .album-controls .btn {
+        padding: 12px 20px; /* Botones más grandes para facilitar el toque */
+        font-size: 18px; /* Texto más grande */
+    }
+    
+    /* Mejorar el área táctil para los controles en móviles */
+    .album-controls .btn i {
+        font-size: 24px;
+    }
 }
-
 .album-thumbnails {
     margin-top: 30px;
     opacity: 0;
@@ -1075,6 +1339,8 @@ document.addEventListener('DOMContentLoaded', function() {
 												-"un aplauso para esta pareja que está enamoradaaaaaa"
 												<br>
 												-"Es una gran persona, se serio por favor"
+												<br>
+												"-estoy muy feliz por ustedes no sabes cuanto"
 											</p>
 										</blockquote>
 									</div>
@@ -1123,6 +1389,27 @@ document.addEventListener('DOMContentLoaded', function() {
 										</blockquote>
 									</div>
 								</div>
+								<div class="item">
+									<div class="testimony-slide active text-center">
+										<figure>
+											<img src="images/couple-3.jpg" alt="user">
+										</figure>
+										<span>Joao Acosta, via <a href="#" class="twitter">En persona</a></span>
+										<blockquote>
+											<p>"Se sabio con tus decisiones, yo sé lo que pasa entre ustedes. Recuerda que si es de Dios, te va a traer paz."</p>
+										</blockquote>
+									</div>
+								</div>
+									<div class="testimony-slide active text-center">
+										<figure>
+											<img src="images/couple-3.jpg" alt="user">
+										</figure>
+										<span>Yissel Martínez, via <a href="#" class="twitter">En persona</a></span>
+										<blockquote>
+											<p>"¿Ustedes andan?... Que raro, pensé que sí, de hecho se ven muy lindos juntos."</p>
+										</blockquote>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -1147,9 +1434,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			<!-- Mensaje -->
 			<div class="col-md-12 text-center mb-4">
 			  <p style="font-size: 1.2em; line-height: 1.6; max-width: 800px; margin: 0 auto;">
-				Eres tan hermosa que me cuesta encontrar palabras que realmente hagan justicia a todo lo que veo en ti. Tus ojos grandes no solo son profundos y brillantes, sino que tienen esa capacidad de detener el mundo cuando me miras; me pierdo en ellos como si fueran un universo entero solo para mí. Tu cabello, con ese color chocolate de princesa, es tan suave y perfecto que parece sacado de un cuento donde tú, sin duda, eres la protagonista.
+				Eres tan hermosa que me cuesta encontrar palabras que realmente hagan justicia a todo lo que veo en ti. Tus ojos grandes no solo son profundos y brillantes, sino que tienen esa capacidad de detener el mundo cuando me miras; me pierdo en ellos como si fueran un universo entero solo para mí. Tu cabello de princesa, con ese tono chocolate que inspira dulzura en mi ser, es tan suave y perfecto que parece sacado de un cuento donde tú, sin duda, eres la protagonista.
 				<br><br>
-				Tus cachetes tienen esa dulzura que me dan ganas de sonreír solo de verlos, y tus labios, tan delicados y tan de modelo, son una tentación que admiro con respeto y ternura. Tu altura, única y perfecta, me encanta; es como si hubieras sido diseñada con cada detalle pensado para robar miradas, pero sobre todo, para robarme el corazón a mí.
+				Tus cachetes tienen esa ternura que me dan ganas de sonreír solo de verlos, y unos labios que parecen de modelo. Tu altura, única y perfecta, me encanta.
 				<br><br>
 				Tu sonrisa... no hay palabras suficientes. Es de esas que iluminan un día gris, de esas que se quedan en la mente aún con los ojos cerrados. Tus cejas gruesas y definidas le dan carácter a tu rostro, fuerza, presencia; y tu nariz me fascina. Es parte de esa armonía que tiene todo en ti, que hace que no haya una sola parte que no adore.
 				<br><br>
@@ -1589,9 +1876,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	</footer>
 	</div>
 
-	<div class="gototop js-top">
-		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
-	</div>
+
 	
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
